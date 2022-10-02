@@ -239,12 +239,12 @@ function validate() {
   document.getElementById("lName").style.borderColor = "";
 
   if (document.getElementById('fName').value == '') {
-    document.getElementById("fName").style.borderColor = "red";
+    document.getElementById("fName").style.borderColor = "#E63946";
     return false;
 
   }
   if (document.getElementById('lName').value == '') {
-    document.getElementById("lName").style.borderColor = "red";
+    document.getElementById("lName").style.borderColor = "#E63946";
     return false;
 
   }
