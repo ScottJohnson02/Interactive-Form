@@ -19,6 +19,10 @@ var data = {
 
 
 }
+//check browser capatibility
+if (!document.addEventListener) {
+  window.location.href = "/legacy.html";
+}
 
 //global variable that determines if form should load
 var done = false;
@@ -143,6 +147,7 @@ function createForm(cookies) {
   }
 
 
+
   // Append inputs to the form
   form.append(FN);
   form.append(LN);
@@ -157,22 +162,61 @@ function createForm(cookies) {
 //save data to local storage
 
 function storeLocal() {
-  var inputFName = document.getElementById("fName");
-  var inputLName = document.getElementById("lName");
-  var inputEmail = document.getElementById("email");
-  localStorage.setItem("fName", inputFName.value);
-  localStorage.setItem("lName", inputLName.value);
-  localStorage.setItem("email", inputEmail.value);
+  //checks if form is valid then saves a local variable
+  if (validate()) {
+    var inputFName = document.getElementById("fName");
+    var inputLName = document.getElementById("lName");
+    var inputEmail = document.getElementById("email");
+    localStorage.setItem("fName", inputFName.value);
+    localStorage.setItem("lName", inputLName.value);
+    localStorage.setItem("email", inputEmail.value);
+  }
+
 }
 
 
 function storeCookie() {
-  var today = new Date();
-  var expiry = new Date(today.getTime() + 30 * 24 * 3600 * 1000); // plus 30 days
-  var inputFName = document.getElementById("fName");
-  var inputLName = document.getElementById("lName");
-  var inputEmail = document.getElementById("email");
-  document.cookie = "fName" + "=" + escape(inputFName.value) + "; path=/; expires=" + expiry.toGMTString();
-  document.cookie = "lName" + "=" + escape(inputLName.value) + "; path=/; expires=" + expiry.toGMTString();
-  document.cookie = "email" + "=" + escape(inputEmail.value) + "; path=/; expires=" + expiry.toGMTString();
+  //checks if form is valid then saves a cookie
+  if (validate()) {
+    var today = new Date();
+    var expiry = new Date(today.getTime() + 30 * 24 * 3600 * 1000); // plus 30 days
+    var inputFName = document.getElementById("fName");
+    var inputLName = document.getElementById("lName");
+    var inputEmail = document.getElementById("email");
+    document.cookie = "fName" + "=" + escape(inputFName.value) + "; path=/; expires=" + expiry.toGMTString();
+    document.cookie = "lName" + "=" + escape(inputLName.value) + "; path=/; expires=" + expiry.toGMTString();
+    document.cookie = "email" + "=" + escape(inputEmail.value) + "; path=/; expires=" + expiry.toGMTString();
+  }
+
+}
+
+
+
+function validate() {
+  //regex email validation
+  var re = /\S+@\S+\.\S+/;
+  var isValid = re.test(document.getElementById('email').value);
+
+  //if all valid set color back to default
+  document.getElementById("email").style.borderColor = "";
+  document.getElementById("fName").style.borderColor = "";
+  document.getElementById("lName").style.borderColor = "";
+
+  if (document.getElementById('fName').value == '') {
+    document.getElementById("fName").style.borderColor = "red";
+    return false;
+
+  }
+  if (document.getElementById('lName').value == '') {
+    document.getElementById("lName").style.borderColor = "red";
+    return false;
+
+  }
+  if (document.getElementById('email').value == '' || isValid != true) {
+    document.getElementById("email").style.borderColor = "red";
+    return false;
+
+  }
+  return true;
+
 }
