@@ -64,9 +64,19 @@ function createSelect(value) {
     //will only add new select if a continuation will continue
     if (data[valArray[index]] == undefined && index != -1) { //only done if the next value has no question and the default option isn't selected
       done == true;
-      createForm(cookies);
+      //checks if a form already exists
+      if (document.getElementById("dynamic-form")) {
+        document.getElementById("dynamic-form").remove();
+        console.log('hgfg');
+        //checks if a choice already exists
+      }
+      if (document.getElementById("selection")) {
+        document.getElementById("selection").remove();
+      }
+
 
       let children = formDiv.childNodes;
+      choice = "You chose: ";
       for (const node of children) {
         if (node.value != null) {
           choice = choice + node.value + ", ";
@@ -75,14 +85,33 @@ function createSelect(value) {
       }
       //removes comma and space
       choice = choice.slice(0, -2);
+      //displays the customers choice
+      createChoice(choice);
+      //displays image of the pizzaPic
+      showPizza();
 
+      //creates the form for the customers
+      createForm(cookies);
+
+      //first element is changed
     } else if (data[valArray[index]] == undefined) {
       //pass
       if (document.getElementById("dynamic-form") != null) {
         document.getElementById("dynamic-form").remove();
+        document.getElementById("pizzaPic").src = '';
       }
+      if (document.getElementById("selection") != null) {
+        document.getElementById("selection").remove();
+      }
+      choice = "You chose: ";
+      //end of data
     } else {
       choice = "You chose: ";
+      //if choice p element exists remove it
+      if (document.getElementById("selection") != null) {
+        document.getElementById("selection").remove();
+        document.getElementById("pizzaPic").src = '';
+      }
       //if form exists delete it
       if (document.getElementById("dynamic-form") != null) {
         document.getElementById("dynamic-form").remove();
@@ -105,6 +134,13 @@ function createSelect(value) {
   }
 }
 
+function createChoice(choice) {
+  let choiceEL = document.createElement("p");
+  choiceEL.textContent = choice;
+  choiceEL.id = 'selection';
+  document.getElementById("online-order").appendChild(choiceEL);
+
+}
 
 //creates the form after all choices have been finalized
 function createForm(cookies) {
@@ -219,4 +255,21 @@ function validate() {
   }
   return true;
 
+}
+
+
+function showPizza() {
+  var pizzaPic = document.getElementById("pizzaPic");
+
+  let children = formDiv.childNodes;
+  let selection = "";
+  for (const node of children) {
+    if (node.value != null) {
+      selection = node.value;
+    }
+  }
+  //removes spaces
+  selection.replace(/\s/g, '');
+  selection = "photos/" + selection + ".png"
+  pizzaPic.src = selection;
 }
